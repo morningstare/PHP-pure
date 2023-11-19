@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drag and Drop File Upload</title>
+    <style>
+        #dropzone {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            margin: 20px auto;
+            text-align: center;
+            line-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="dropzone">Drop files here</div>
+
+    <script>
+        var dropzone = document.getElementById("dropzone");
+
+        dropzone.addEventListener("dragenter", function (e) {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "#f7f7f7";
+        });
+
+        dropzone.addEventListener("dragover", function (e) {
+            e.preventDefault();
+        });
+
+        dropzone.addEventListener("dragleave", function (e) {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "transparent";
+        });
+
+        dropzone.addEventListener("drop", function (e) {
+            e.preventDefault();
+            dropzone.style.backgroundColor = "transparent";
+
+            var files = e.dataTransfer.files;
+            uploadFiles(files);
+        });
+
+        function uploadFiles(files) {
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData();
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append("files[]", files[i]);
+            }
+
+            xhr.open("POST", "upload.php", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    const succes = document.createElement('span');
+                    succes.innerText = 'Upload successful';
+                    document.body.appendChild(succes);
+                } else {
+                    const wrong = document.createElement('span');
+                    wrong.innerText = 'Upload successful';
+                    document.body.appendChild(wrong);
+                }
+            };
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>
